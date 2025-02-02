@@ -1,5 +1,4 @@
 services:
-  # Serviço para MongoDB
   mongo:
     image: mongo:latest
     container_name: mongodb
@@ -11,7 +10,6 @@ services:
       - app-network
     restart: always
 
-  # Serviço para a aplicação Go
   go-app:
     build:
       context: .
@@ -20,18 +18,21 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGO_URI=mongodb://mongo:27017
+      - MONGO_URI=${MONGODB_URI}
+      - DB_NAME=${DB_NAME}
+    env_file:
+      - .env
+    volumes:
+    - .:/app
     depends_on:
       - mongo
     networks:
       - app-network
     restart: always
 
-# Volumes para persistência de dados
 volumes:
   mongodb-data:
 
-# Definir a rede para os serviços
 networks:
   app-network:
     driver: bridge

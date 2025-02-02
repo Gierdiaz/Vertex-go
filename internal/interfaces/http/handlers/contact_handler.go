@@ -3,8 +3,9 @@ package handlers
 import (
 	"log"
 
-	"github.com/Gierdiaz/Vertex-go/internal/entities"
-	"github.com/Gierdiaz/Vertex-go/internal/services"
+	"github.com/Gierdiaz/Vertex-go/internal/application/services"
+	"github.com/Gierdiaz/Vertex-go/internal/domain/entities"
+	"github.com/Gierdiaz/Vertex-go/internal/domain/valueobjects"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -33,7 +34,7 @@ func (h *ContactHandler) CreateContact(c *fiber.Ctx) error {
 		Nome:     req.Nome,
 		Email:    req.Email,
 		Telefone: req.Telefone,
-		Address: entities.Address{
+		Address: valueobjects.Address{
 			CEP: req.Cep,
 		},
 	}

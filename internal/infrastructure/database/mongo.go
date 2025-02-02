@@ -1,10 +1,11 @@
-package config
+package database
 
 import (
 	"context"
 	"fmt"
 	"log"
 
+	"github.com/Gierdiaz/Vertex-go/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -13,7 +14,14 @@ import (
 var DB *mongo.Database
 
 func ConnectMongo() error {
-	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb://mongo:27017"))
+
+	cfg, err := config.Load()
+	if err != nil {
+		log.Printf("Erro ao carregar configurações do arquivo .env: %v", err)
+		return err
+	}
+
+	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(cfg.MongoURI))
 	if err != nil {
 		log.Fatalf("Erro ao conectar ao MongoDB: %v", err)
 	}

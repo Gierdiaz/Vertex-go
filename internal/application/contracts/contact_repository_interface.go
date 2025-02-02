@@ -1,7 +1,7 @@
-package interfaces
+package contracts
 
 import (
-	"github.com/Gierdiaz/Vertex-go/internal/entities"
+	"github.com/Gierdiaz/Vertex-go/internal/domain/entities"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

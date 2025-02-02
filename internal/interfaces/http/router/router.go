@@ -1,15 +1,15 @@
 package router
 
 import (
-	"github.com/Gierdiaz/Vertex-go/config"
-	"github.com/Gierdiaz/Vertex-go/internal/handlers"
-	"github.com/Gierdiaz/Vertex-go/internal/repositories"
-	"github.com/Gierdiaz/Vertex-go/internal/services"
+	"github.com/Gierdiaz/Vertex-go/internal/application/services"
+	"github.com/Gierdiaz/Vertex-go/internal/infrastructure/database"
+	"github.com/Gierdiaz/Vertex-go/internal/infrastructure/repositories"
+	"github.com/Gierdiaz/Vertex-go/internal/interfaces/http/handlers"
 	"github.com/gofiber/fiber/v2"
 )
 
 func SetupRoutes(app *fiber.App) {
-	contactRepo := repositories.NewContactRepository(config.DB)
+	contactRepo := repositories.NewContactRepository(database.DB)
 	contactService := services.NewContactService(contactRepo)
 	contactHandler := handlers.NewContactHandler(contactService)
 

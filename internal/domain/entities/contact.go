@@ -4,18 +4,19 @@ import (
 	"errors"
 	"regexp"
 
+	"github.com/Gierdiaz/Vertex-go/internal/domain/valueobjects"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Contact struct {
-	ID       primitive.ObjectID `bson:"_id" json:"id"`
-	Nome     string             `bson:"nome" json:"nome"`
-	Email    string             `bson:"email" json:"email"`
-	Telefone string             `bson:"telefone" json:"telefone"`
-	Address  Address            `bson:"address_id" json:"address"`
+	ID       primitive.ObjectID   `bson:"_id" json:"id"`
+	Nome     string               `bson:"nome" json:"nome"`
+	Email    string               `bson:"email" json:"email"`
+	Telefone string               `bson:"telefone" json:"telefone"`
+	Address  valueobjects.Address `bson:"address" json:"address"`
 }
 
-func NewContact(Nome, Email, Telefone string, Address Address) (*Contact, error) {
+func NewContact(Nome, Email, Telefone string, Address valueobjects.Address) (*Contact, error) {
 	contact := &Contact{
 		ID:       primitive.NewObjectID(),
 		Nome:     Nome,

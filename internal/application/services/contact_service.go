@@ -1,17 +1,18 @@
 package services
 
 import (
-	"github.com/Gierdiaz/Vertex-go/internal/entities"
-	"github.com/Gierdiaz/Vertex-go/internal/integrations"
-	"github.com/Gierdiaz/Vertex-go/internal/interfaces"
+	"github.com/Gierdiaz/Vertex-go/internal/application/contracts"
+	"github.com/Gierdiaz/Vertex-go/internal/domain/entities"
+	"github.com/Gierdiaz/Vertex-go/internal/domain/valueobjects"
+	"github.com/Gierdiaz/Vertex-go/internal/infrastructure/integrations"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type ContactService struct {
-	contactRepo interfaces.ContactRepositoryInterface
+	contactRepo contracts.ContactRepositoryInterface
 }
 
-func NewContactService(contactRepo interfaces.ContactRepositoryInterface) *ContactService {
+func NewContactService(contactRepo contracts.ContactRepositoryInterface) *ContactService {
 	return &ContactService{contactRepo: contactRepo}
 }
 
@@ -21,7 +22,7 @@ func (s *ContactService) CreateContact(contact *entities.Contact) (*entities.Con
 		return nil, err
 	}
 
-	address, err := entities.NewAddress(
+	address, err := valueobjects.NewAddress(
 		addressData.CEP,
 		addressData.Logradouro,
 		addressData.Bairro,

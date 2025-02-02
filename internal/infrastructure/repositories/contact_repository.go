@@ -3,8 +3,8 @@ package repositories
 import (
 	"context"
 
-	"github.com/Gierdiaz/Vertex-go/internal/entities"
-	"github.com/Gierdiaz/Vertex-go/internal/interfaces"
+	"github.com/Gierdiaz/Vertex-go/internal/application/contracts"
+	"github.com/Gierdiaz/Vertex-go/internal/domain/entities"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -14,7 +14,7 @@ type ContactRepository struct {
 	collection *mongo.Collection
 }
 
-func NewContactRepository(db *mongo.Database) interfaces.ContactRepositoryInterface {
+func NewContactRepository(db *mongo.Database) contracts.ContactRepositoryInterface {
 	return &ContactRepository{
 		collection: db.Collection("contacts"),
 	}
