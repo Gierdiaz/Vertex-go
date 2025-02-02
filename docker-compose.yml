@@ -1,0 +1,37 @@
+services:
+  # Serviço para MongoDB
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - app-network
+    restart: always
+
+  # Serviço para a aplicação Go
+  go-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: go-app
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+    restart: always
+
+# Volumes para persistência de dados
+volumes:
+  mongodb-data:
+
+# Definir a rede para os serviços
+networks:
+  app-network:
+    driver: bridge
