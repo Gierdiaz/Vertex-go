@@ -5,14 +5,15 @@ import (
 	"regexp"
 
 	"github.com/Gierdiaz/Vertex-go/internal/domain/valueobjects"
+	"github.com/Gierdiaz/Vertex-go/internal/validation"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Contact struct {
 	ID       primitive.ObjectID   `bson:"_id" json:"id"`
-	Nome     string               `bson:"nome" json:"nome"`
-	Email    string               `bson:"email" json:"email"`
-	Telefone string               `bson:"telefone" json:"telefone"`
+	Nome     string               `bson:"nome" json:"nome" validate:"required"`
+	Email    string               `bson:"email" json:"email" validate:"required,email"`
+	Telefone string               `bson:"telefone" json:"telefone" validate:"required,telefone"`
 	Address  valueobjects.Address `bson:"address" json:"address"`
 }
 
@@ -32,6 +33,7 @@ func NewContact(Nome, Email, Telefone string, Address valueobjects.Address) (*Co
 	return contact, nil
 }
 
+
 func (c *Contact) Validate() error {
 	if c.Nome == "" {
 		return errors.New("nome não pode ser vazio")
@@ -43,7 +45,7 @@ func (c *Contact) Validate() error {
 		return errors.New("telefone inválido")
 	}
 
-	return nil
+	return validation.ValidateStruct(c)
 }
 
 func isValidEmail(email string) bool {
@@ -52,6 +54,6 @@ func isValidEmail(email string) bool {
 }
 
 func isValidTelefone(telefone string) bool {
-	re := regexp.MustCompile(`^\(?\d{2}\)? ?\d{4,5}-?\d{4}$`)
+	re := regexp.MustCompile(`^\(\d{2}\)\s\d{4,5}-\d{4}$`)
 	return re.MatchString(telefone)
 }

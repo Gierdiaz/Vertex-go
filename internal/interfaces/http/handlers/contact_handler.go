@@ -39,6 +39,11 @@ func (h *ContactHandler) CreateContact(c *fiber.Ctx) error {
 		},
 	}
 
+	if err := contact.Validate(); err != nil {
+		log.Printf("Validation failed: %v", err)
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	}
+
 	newContact, err := h.service.CreateContact(contact)
 	if err != nil {
 		log.Printf("Error creating contact: %v", err)

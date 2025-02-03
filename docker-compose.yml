@@ -4,35 +4,36 @@ services:
     container_name: mongodb
     ports:
       - "27017:27017"
-    environment:
-      - MONGODB_URI=${MONGODB_URI}
-      - DB_NAME=${DB_NAME}
+    command: ["mongod", "--bind_ip_all"]
     volumes:
       - mongodb-data:/data/db
     networks:
       - app-network
     restart: always
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand('ping').ok"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
 
   go-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: go-app
+    container_name: golang_fiber
     ports:
       - "3000:3000"
-    environment:
-      - MONGODB_URI=${MONGODB_URI}
-      - DB_NAME=${DB_NAME}
     env_file:
       - .env
-    volumes:
-    - .:/app
-    - .env:/app/.env
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     networks:
       - app-network
     restart: always
+    command: ["./main"]
 
 volumes:
   mongodb-data:

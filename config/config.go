@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -14,8 +13,15 @@ type Config struct {
 }
 
 func LoadEnv() (*Config, error) {
-	if err := godotenv.Load(".env"); err != nil {
-		return nil, fmt.Errorf("error loading .env file: %v", err)
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("Erro ao obter o diretório de trabalho: %v", err)
+	}
+	log.Printf("Diretório de trabalho: %s", wd)
+	
+	if err := godotenv.Load(); err != nil {
+		log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
+		return nil, err
 	}
 
 	config := &Config{
