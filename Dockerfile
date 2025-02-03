@@ -13,8 +13,6 @@ RUN go mod tidy
 # Copiar o restante do código para o contêiner
 COPY . ./
 
-COPY .env .env
-
 # Compilar a aplicação Go
 RUN go build -o main cmd/main.go
 

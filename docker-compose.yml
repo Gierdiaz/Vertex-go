@@ -4,6 +4,9 @@ services:
     container_name: mongodb
     ports:
       - "27017:27017"
+    environment:
+      - MONGODB_URI=${MONGODB_URI}
+      - DB_NAME=${DB_NAME}
     volumes:
       - mongodb-data:/data/db
     networks:
@@ -18,12 +21,13 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGO_URI=${MONGODB_URI}
+      - MONGODB_URI=${MONGODB_URI}
       - DB_NAME=${DB_NAME}
     env_file:
       - .env
     volumes:
     - .:/app
+    - .env:/app/.env
     depends_on:
       - mongo
     networks:

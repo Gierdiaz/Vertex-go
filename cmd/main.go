@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/Gierdiaz/Vertex-go/config"
 	"github.com/Gierdiaz/Vertex-go/internal/infrastructure/database"
 	"github.com/Gierdiaz/Vertex-go/internal/interfaces/http/router"
 	"github.com/gofiber/fiber/v2"
@@ -11,7 +12,14 @@ import (
 )
 
 func main() {
-	if err := database.ConnectMongo(); err != nil {
+
+	cfg, err := config.LoadEnv()
+	if err != nil {
+		log.Fatalf("Erro ao carregar configurações do arquivo .env: %v", err)
+		return
+	}
+
+	if err := database.ConnectMongo(cfg); err != nil {
 		log.Fatalf("Erro ao conectar ao MongoDB: %v", err)
 	}
 

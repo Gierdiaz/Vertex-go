@@ -13,8 +13,8 @@ type Config struct {
 	DBName   string
 }
 
-func Load() (*Config, error) {
-	if err := godotenv.Load("/app/.env"); err != nil {
+func LoadEnv() (*Config, error) {
+	if err := godotenv.Load(".env"); err != nil {
 		return nil, fmt.Errorf("error loading .env file: %v", err)
 	}
 
@@ -24,7 +24,7 @@ func Load() (*Config, error) {
 	}
 
 	if config.DBName == "" || config.MongoURI == "" {
-		log.Fatalf("As variáveis de ambiente MONGO_URI ou DB_NAME não foram definidas")
+		log.Fatalf("As variáveis de ambiente MONGODB_URI ou DB_NAME não foram definidas")
 	}
 
 	return config, nil
