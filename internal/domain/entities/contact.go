@@ -13,7 +13,7 @@ type Contact struct {
 	ID       primitive.ObjectID   `bson:"_id" json:"id"`
 	Nome     string               `bson:"nome" json:"nome" validate:"required"`
 	Email    string               `bson:"email" json:"email" validate:"required,email"`
-	Telefone string               `bson:"telefone" json:"telefone" validate:"required,telefone"`
+	Telefone string               `bson:"telefone" json:"telefone" validate:"required"`
 	Address  valueobjects.Address `bson:"address" json:"address"`
 }
 
@@ -39,13 +39,17 @@ func (c *Contact) Validate() error {
 		return errors.New("nome não pode ser vazio")
 	}
 	if !isValidEmail(c.Email) {
-		return errors.New("e-mail inválido")
+		return errors.New("e-mail inválido. O formato correto é: exemplo@dominio.com")
 	}
 	if !isValidTelefone(c.Telefone) {
-		return errors.New("telefone inválido")
+		return errors.New("telefone inválido. O formato correto é: DDD + número")
 	}
 
-	return validation.ValidateStruct(c)
+	if err := validation.ValidateStruct(c); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func isValidEmail(email string) bool {
@@ -54,6 +58,6 @@ func isValidEmail(email string) bool {
 }
 
 func isValidTelefone(telefone string) bool {
-	re := regexp.MustCompile(`^\(\d{2}\)\s\d{4,5}-\d{4}$`)
+	re := regexp.MustCompile(`^\d{2}\d{8,9}$`)
 	return re.MatchString(telefone)
 }
